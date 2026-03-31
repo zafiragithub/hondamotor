@@ -167,7 +167,7 @@
         function renderProducts(rows) {
             let html = '';
             rows.forEach(row => {
-                if (!row || !row.c || !row.c[0]) return;
+                if (!row || !row.c || !row.c[0] || row.c[0].v === null || String(row.c[0].v).trim() === '') return;
 
                 const namaMotor = row.c[0] ? row.c[0].v : 'Tanpa Nama';
                 const tipeMotor = row.c[1] ? row.c[1].v : 'HONDA';
