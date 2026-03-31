@@ -162,7 +162,7 @@
                 // --- LOGIKA PEMISAH GAMBAR ---
                 const teksGambar = row.c[3] ? row.c[3].v : '';
                 // Pisahkan dengan koma, ambil urutan pertama [0]
-                const arrayGambar = teksGambar.split(',').map(url => url.trim());
+                const arrayGambar = teksGambar.split(';').map(url => url.trim()).filter(url => url !== '');
                 const gambarUtama = arrayGambar[0] || 'https://via.placeholder.com/300x200?text=No+Image';
 
                 const linkDetail = `detail.html?id=${encodeURIComponent(namaMotor)}`;
