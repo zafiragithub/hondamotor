@@ -30,9 +30,9 @@
     </nav>
 
     <header class="pt-16 md:pt-20">
-        <div class="relative w-full h-48 md:h-96 overflow-hidden group">
+        <div class="relative w-full h-[250px] sm:h-[350px] md:h-[450px] lg:h-[600px] overflow-hidden group">
             
-            <div id="slide-container" class="flex transition-transform duration-500 ease-out h-full w-full">
+             <div id="slide-container" class="flex transition-transform duration-500 ease-out h-full w-full">
                 <div class="w-full h-full flex-shrink-0 relative">
                     <img src="https://ik.imagekit.io/zlt25mb52fx/ahmcdn/tr:q-70,pr-true,f-auto/uploads/page/banner/homepage-banner-1366x573ai-11022026-070311.jpg" alt="Promo 1" class="w-full h-full object-cover">
                 </div>
@@ -84,7 +84,6 @@
         let currentIndex = 0;
         let slideInterval;
 
-        // Buat indikator dots
         for(let i = 0; i < totalSlides; i++) {
             const dot = document.createElement('button');
             dot.className = `w-3 h-3 rounded-full ${i === 0 ? 'bg-red-600' : 'bg-gray-300'} focus:outline-none transition`;
@@ -95,7 +94,6 @@
 
         function updateSlider() {
             slideContainer.style.transform = `translateX(-${currentIndex * 100}%)`;
-            // Update dots
             Array.from(dots).forEach((dot, index) => {
                 dot.classList.remove('bg-red-600');
                 dot.classList.add('bg-gray-300');
@@ -129,39 +127,31 @@
             slideInterval = setInterval(nextSlide, 5000); // Slide otomatis tiap 5 detik
         }
 
-        // Event Listener Tombol Slider
         document.getElementById('nextSlide').addEventListener('click', nextSlide);
         document.getElementById('prevSlide').addEventListener('click', prevSlide);
         
-        // Mulai autoplay slider
         resetInterval();
-
 
         // ==========================================
         // 2. PENGATURAN DATABASE GOOGLE SHEET & KONTAK
         // ==========================================
         const SHEET_ID = '1T7cKvl4pwVO5hZWxq0JRm7JI5KeVKl-7Lf6waipXkq8'; // Ganti dengan ID Google Sheet Anda
         const SHEET_NAME = 'DataMotor'; // Nama tab di Google Sheet
-        const NOMOR_WA = '6281234567890'; // Ganti dengan nomor WhatsApp Anda (Gunakan 62 di depan)
+        const NOMOR_WA = '628871271633'; // Ganti dengan nomor WhatsApp Anda (Gunakan 62 di depan)
 
-        // URL Endpoint Google Visualization API
         const gvizURL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`;
 
-        // Elemen DOM untuk produk
         const productGrid = document.getElementById('product-grid');
         const loading = document.getElementById('loading');
 
-        // Fungsi Mengambil Data
         async function fetchMotorData() {
             try {
                 const response = await fetch(gvizURL);
                 const text = await response.text();
                 
-                // Gviz mengembalikan data yang dibungkus function, kita harus memotongnya
                 const jsonString = text.match(/google\.visualization\.Query\.setResponse\(([\s\S\w]+)\)/)[1];
                 const data = JSON.parse(jsonString);
                 
-                // Melewati baris pertama (Header) dan memproses baris data
                 const rows = data.table.rows;
                 renderProducts(rows);
             } catch (error) {
@@ -170,7 +160,6 @@
             }
         }
 
-        // Fungsi Menampilkan Data ke HTML
         function renderProducts(rows) {
             let html = '';
 
@@ -180,18 +169,17 @@
                 const hargaMotor = row.c[2] ? row.c[2].v : 'Hubungi Kami';
                 const gambarMotor = row.c[3] ? row.c[3].v : 'https://via.placeholder.com/300x200?text=No+Image';
 
-                // Format Pesan WhatsApp
                 const pesanWA = encodeURIComponent(`Halo bos, saya tertarik dengan motor ${namaMotor}. Bisa minta info promo terbarunya?`);
                 const linkWA = `https://wa.me/${NOMOR_WA}?text=${pesanWA}`;
 
                 html += `
-                    <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300 border border-gray-100">
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300 border border-gray-100 flex flex-col h-full">
                         <img src="${gambarMotor}" alt="${namaMotor}" class="w-full h-48 object-cover object-center bg-gray-100">
-                        <div class="p-5">
+                        <div class="p-5 flex flex-col flex-grow">
                             <span class="text-xs font-semibold text-red-600 uppercase tracking-wide">${tipeMotor}</span>
                             <h4 class="text-lg font-bold text-gray-900 mt-1">${namaMotor}</h4>
-                            <p class="text-gray-600 mt-2 font-medium">${hargaMotor}</p>
-                            <a href="${linkWA}" target="_blank" class="mt-4 block text-center w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition">
+                            <p class="text-gray-600 mt-2 font-medium flex-grow">${hargaMotor}</p>
+                            <a href="${linkWA}" target="_blank" class="mt-4 block text-center w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition mt-auto">
                                 Pesan via WhatsApp
                             </a>
                         </div>
@@ -199,13 +187,11 @@
                 `;
             });
 
-            // Sembunyikan loading, tampilkan grid
             loading.style.display = 'none';
             productGrid.innerHTML = html;
             productGrid.classList.remove('hidden');
         }
 
-        // Jalankan saat halaman dimuat
         fetchMotorData();
     </script>
 </body>
