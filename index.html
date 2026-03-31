@@ -30,9 +30,9 @@
     </nav>
 
     <header class="pt-16 md:pt-20">
-        <div class="relative w-full h-[250px] sm:h-[350px] md:h-[450px] lg:h-[600px] overflow-hidden group">
+        <div class="relative w-full h-[250px] sm:h-[350px] md:h-[450px] lg:h-[600px] overflow-hidden group bg-white border-b">
             
-             <div id="slide-container" class="flex transition-transform duration-500 ease-out h-full w-full">
+            <div id="slide-container" class="flex transition-transform duration-500 ease-out h-full w-full">
                 <div class="w-full h-full flex-shrink-0 relative">
                     <img src="https://ik.imagekit.io/zlt25mb52fx/ahmcdn/tr:q-70,pr-true,f-auto/uploads/page/banner/homepage-banner-1366x573ai-11022026-070311.jpg" alt="Promo 1" class="w-full h-full object-cover">
                 </div>
@@ -86,7 +86,7 @@
 
         for(let i = 0; i < totalSlides; i++) {
             const dot = document.createElement('button');
-            dot.className = `w-3 h-3 rounded-full ${i === 0 ? 'bg-red-600' : 'bg-gray-300'} focus:outline-none transition`;
+            dot.className = `w-3 h-3 rounded-full ${i === 0 ? 'bg-red-600' : 'bg-gray-300'} focus:outline-none transition shadow-sm`;
             dot.addEventListener('click', () => goToSlide(i));
             dotsContainer.appendChild(dot);
         }
@@ -156,7 +156,7 @@
                 renderProducts(rows);
             } catch (error) {
                 console.error('Gagal mengambil data:', error);
-                loading.innerHTML = '<p class="text-red-500">Gagal memuat data. Pastikan ID Sheet benar dan akses diset ke Public.</p>';
+                loading.innerHTML = '<p class="text-red-500 text-center font-semibold">Gagal memuat data katalog.<br>Pastikan ID Sheet benar dan akses diset ke "Anyone with the link".</p>';
             }
         }
 
