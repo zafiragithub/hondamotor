@@ -109,8 +109,8 @@
         // ==========================================
         // 1. PENGATURAN API (WAJIB DIISI BOS!)
         // ==========================================
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz6Iw7RxUDumhgVv1FTWo3l2LGRndGDqCBJq_ZB1KqhJO4NCJNrW5VwkZdyWHTt1mJzHA/exec'; // Hasil Deploy Apps Script baru
-        const SHEET_ID = '1T7cKvl4pwVO5hZWxq0JRm7JI5KeVKl-7Lf6waipXkq8'; // ID Google Sheet
+        const SCRIPT_URL = 'MASUKKAN_URL_WEB_APP_GAS_DI_SINI'; 
+        const SHEET_ID = '1T7cKvl4pwVO5hZWxq0JRm7JI5KeVKl-7Lf6waipXkq8'; 
         
         const gvizURL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=DataMotor`;
         let globalDataMotor = [];
@@ -144,21 +144,25 @@
                 let html = '';
 
                 rows.forEach(row => {
-                    // Cek jika baris benar-benar kosong (Solusi baris hantu)
-                    if (!row || !row.c || !row.c[0] || row.c[0].v === null || String(row.c[0].v).trim() === '') return;
+                    // FILTER SAPU JAGAT DI ADMIN
+                    if (!row || !row.c || row.c.length === 0) return;
+                    
+                    let cellNama = row.c[0];
+                    if (!cellNama || cellNama.v === null || cellNama.v === undefined || String(cellNama.v).trim() === '') return;
+                    
+                    const nama = String(cellNama.v).trim();
+                    if (nama.toLowerCase() === 'null') return; // Blokir
 
-                    const nama = row.c[0].v;
-                    const tipe = row.c[1] ? row.c[1].v : '-';
-                    const harga = row.c[2] ? row.c[2].v : '-';
-                    const gambarRaw = row.c[3] ? row.c[3].v : '';
-                    const deskripsiHtml = row.c[4] ? row.c[4].v : '';
+                    const tipe = row.c[1] && row.c[1].v ? row.c[1].v : '-';
+                    const harga = row.c[2] && row.c[2].v ? row.c[2].v : '-';
+                    const gambarRaw = row.c[3] && row.c[3].v ? String(row.c[3].v) : '';
+                    const deskripsiHtml = row.c[4] && row.c[4].v ? row.c[4].v : '';
                     const gambarUtama = gambarRaw.split(';')[0] || 'https://via.placeholder.com/50';
 
-                    // Simpan ke array global untuk fitur Edit
                     globalDataMotor.push({nama, tipe, harga, gambar: gambarRaw, deskripsi: deskripsiHtml});
 
                     html += `
-                        <tr class="hover:bg-gray-50 transition">
+                        <tr class="hover:bg-gray-50 transition border-b border-gray-100">
                             <td class="px-4 py-3"><img src="${gambarUtama}" class="w-12 h-12 object-cover rounded bg-white border"></td>
                             <td class="px-4 py-3 font-bold text-honda-dark">${nama}</td>
                             <td class="px-4 py-3"><span class="bg-gray-200 text-xs px-2 py-1 rounded">${tipe}</span></td>
@@ -193,7 +197,6 @@
             document.getElementById('input-harga').value = motor.harga;
             document.getElementById('input-gambar').value = motor.gambar;
             
-            // Masukkan HTML utuh ke Promo, sembunyikan kotak spek (karena sudah berbentuk HTML)
             document.getElementById('input-promo').value = motor.deskripsi;
             specContainer.style.display = 'none'; 
 
@@ -249,9 +252,8 @@
             
             let action = document.getElementById('input-action').value;
             let promoText = document.getElementById('input-promo').value;
-            let finalHTML = promoText; // Default pakai promo text
+            let finalHTML = promoText; 
 
-            // GENERATOR HTML (Hanya jalan saat Create, karena saat Edit speknya dihide)
             if (action === 'create') {
                 let specText = document.getElementById('input-spek').value;
                 if (specText.trim() !== '') {
@@ -278,7 +280,7 @@
                     alertBox.textContent = '✅ Berhasil!';
                     alertBox.className = 'mb-6 p-3 rounded font-bold text-sm text-center bg-green-100 text-green-700 block';
                     resetForm();
-                    loadTable(); // Reload tabel otomatis
+                    loadTable(); 
                 })
                 .catch(error => {
                     alertBox.textContent = '❌ Gagal menyimpan. Cek URL Web App.';
@@ -291,7 +293,6 @@
                 });
         });
 
-        // Jalankan saat pertama kali dibuka
         loadTable();
     </script>
 </body>
