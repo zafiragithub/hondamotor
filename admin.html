@@ -107,12 +107,14 @@
 
     <script>
         // ==========================================
-        // 1. PENGATURAN API (WAJIB DIISI BOS!)
+        // 1. PENGATURAN API
         // ==========================================
+        // PASTIKAN URL WEB APP INI SUDAH BENAR MILIK BOS
         const SCRIPT_URL = 'MASUKKAN_URL_WEB_APP_GAS_DI_SINI'; 
         const SHEET_ID = '1T7cKvl4pwVO5hZWxq0JRm7JI5KeVKl-7Lf6waipXkq8'; 
         
-        const gvizURL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=DataMotor`;
+        // Tambahkan &headers=1 di sini juga
+        const gvizURL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&headers=1&sheet=DataMotor`;
         let globalDataMotor = [];
 
         // DOM Elements
@@ -144,14 +146,20 @@
                 let html = '';
 
                 rows.forEach(row => {
-                    // FILTER SAPU JAGAT DI ADMIN
                     if (!row || !row.c || row.c.length === 0) return;
                     
                     let cellNama = row.c[0];
-                    if (!cellNama || cellNama.v === null || cellNama.v === undefined || String(cellNama.v).trim() === '') return;
+                    if (!cellNama || cellNama.v === null || cellNama.v === undefined) return;
                     
                     const nama = String(cellNama.v).trim();
-                    if (nama.toLowerCase() === 'null') return; // Blokir
+                    
+                    // Blokir judul kolom dan baris kosong
+                    if (nama === '' || 
+                        nama.toLowerCase() === 'null' || 
+                        nama.toLowerCase() === 'nama motor' || 
+                        nama.toLowerCase() === 'nama') {
+                        return; 
+                    }
 
                     const tipe = row.c[1] && row.c[1].v ? row.c[1].v : '-';
                     const harga = row.c[2] && row.c[2].v ? row.c[2].v : '-';
@@ -175,9 +183,13 @@
                     `;
                 });
 
-                tableBody.innerHTML = html;
-                tableLoading.style.display = 'none';
-                tableContainer.classList.remove('hidden');
+                if(html === '') {
+                     tableLoading.innerHTML = `<span class="text-gray-500">Belum ada data motor.</span>`;
+                } else {
+                    tableBody.innerHTML = html;
+                    tableLoading.style.display = 'none';
+                    tableContainer.classList.remove('hidden');
+                }
             } catch (error) {
                 tableLoading.innerHTML = `<span class="text-red-500 font-bold">Gagal memuat tabel database.</span>`;
             }
