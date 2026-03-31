@@ -25,9 +25,11 @@
     <style>
         .loader { border-top-color: #cc0000; animation: spinner 1s linear infinite; }
         @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        /* Transisi halus untuk gambar di dalam card */
         .card-img-hover { transition: transform 0.5s ease; }
         .group:hover .card-img-hover { transform: scale(1.1); }
+        /* Scrollbar tersembunyi untuk tab kategori di HP */
+        .hide-scroll::-webkit-scrollbar { display: none; }
+        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans flex flex-col min-h-screen">
@@ -69,9 +71,18 @@
     </header>
 
     <main id="katalog" class="container mx-auto px-4 py-12 lg:py-20 flex-grow max-w-7xl">
-        <div class="text-center mb-12">
-            <h3 class="text-3xl md:text-4xl font-extrabold text-honda-dark uppercase tracking-tight">Katalog Produk</h3>
-            <div class="w-24 h-1 bg-honda-red mx-auto mt-4 rounded-full"></div>
+        
+        <div class="text-center mb-8">
+            <h3 class="text-3xl md:text-4xl font-extrabold text-honda-dark mb-8 tracking-tight">Pilih Motor Honda Favorit Anda</h3>
+            
+            <div class="flex overflow-x-auto hide-scroll justify-start sm:justify-center gap-6 md:gap-10 px-2">
+                <button onclick="filterCategory('SEMUA', this)" class="category-tab whitespace-nowrap pb-3 text-lg font-bold text-honda-dark border-b-2 border-honda-dark transition-all">Semua</button>
+                <button onclick="filterCategory('MATIC', this)" class="category-tab whitespace-nowrap pb-3 text-lg font-semibold text-gray-400 hover:text-honda-dark border-b-2 border-transparent hover:border-gray-300 transition-all">Matic</button>
+                <button onclick="filterCategory('SPORT', this)" class="category-tab whitespace-nowrap pb-3 text-lg font-semibold text-gray-400 hover:text-honda-dark border-b-2 border-transparent hover:border-gray-300 transition-all">Sport</button>
+                <button onclick="filterCategory('CUB', this)" class="category-tab whitespace-nowrap pb-3 text-lg font-semibold text-gray-400 hover:text-honda-dark border-b-2 border-transparent hover:border-gray-300 transition-all">Cub</button>
+                <button onclick="filterCategory('EV', this)" class="category-tab whitespace-nowrap pb-3 text-lg font-semibold text-gray-400 hover:text-honda-dark border-b-2 border-transparent hover:border-gray-300 transition-all">EV</button>
+                <button onclick="filterCategory('BIGBIKE', this)" class="category-tab whitespace-nowrap pb-3 text-lg font-semibold text-gray-400 hover:text-honda-dark border-b-2 border-transparent hover:border-gray-300 transition-all">BigBike</button>
+            </div>
         </div>
 
         <div id="loading" class="flex flex-col justify-center items-center py-20">
@@ -121,12 +132,13 @@
         // --- GOOGLE SHEET & GVIZ ---
         const SHEET_ID = '1T7cKvl4pwVO5hZWxq0JRm7JI5KeVKl-7Lf6waipXkq8'; 
         const SHEET_NAME = 'DataMotor'; 
-        
-        // JURUS 1: Tambahkan &headers=1 agar baris pertama dianggap judul
         const gvizURL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&headers=1&sheet=${SHEET_NAME}`;
 
         const productGrid = document.getElementById('product-grid');
         const loading = document.getElementById('loading');
+
+        // Variabel untuk menyimpan semua data dari Sheet agar tidak perlu loading terus saat filter diganti
+        let allProductsData = [];
 
         async function fetchMotorData() {
             try {
@@ -139,15 +151,40 @@
                 const jsonString = text.substring(startIndex, endIndex);
                 const data = JSON.parse(jsonString);
 
-                renderProducts(data.table.rows);
+                // Simpan data ke variabel global
+                allProductsData = data.table.rows;
+                
+                // Tampilkan SEMUA kategori saat web pertama kali dibuka
+                renderProducts('SEMUA');
+                
             } catch (error) {
                 loading.innerHTML = `<div class="text-center bg-red-50 p-6 rounded-2xl mx-4 max-w-lg w-full"><p class="text-honda-red font-extrabold text-xl mb-2">⚠ Gagal Memuat Data</p></div>`;
             }
         }
 
-        function renderProducts(rows) {
+        // FUNGSI UNTUK TAB KATEGORI
+        function filterCategory(categoryTarget, btnElement) {
+            // 1. Ubah styling tab (Reset semua, lalu aktifkan yang diklik)
+            const allTabs = document.querySelectorAll('.category-tab');
+            allTabs.forEach(tab => {
+                tab.classList.remove('font-bold', 'text-honda-dark', 'border-honda-dark');
+                tab.classList.add('font-semibold', 'text-gray-400', 'border-transparent');
+            });
+            
+            // Set tab yang diklik jadi tebal dan digarisbawahi
+            btnElement.classList.remove('font-semibold', 'text-gray-400', 'border-transparent');
+            btnElement.classList.add('font-bold', 'text-honda-dark', 'border-honda-dark');
+
+            // 2. Render ulang produk berdasarkan kategori
+            renderProducts(categoryTarget);
+        }
+
+        function renderProducts(filterKategori) {
             let html = '';
-            rows.forEach(row => {
+            let itemsCount = 0;
+
+            allProductsData.forEach(row => {
+                // Filter sapu jagat
                 if (!row || !row.c || row.c.length === 0) return;
                 
                 let cellNama = row.c[0];
@@ -162,7 +199,13 @@
                     return; 
                 }
                 
-                const tipeMotor = row.c[1] && row.c[1].v ? row.c[1].v : 'HONDA';
+                const tipeMotor = row.c[1] && row.c[1].v ? String(row.c[1].v).trim() : 'HONDA';
+                
+                // LOGIKA FILTER: Cek apakah tipe motor sama dengan tab yang diklik
+                if (filterKategori !== 'SEMUA' && tipeMotor.toUpperCase() !== filterKategori.toUpperCase()) {
+                    return; // Lewati motor ini jika tidak sesuai kategori
+                }
+
                 const hargaMotor = row.c[2] && row.c[2].v ? row.c[2].v : 'Hubungi Kami';
                 
                 const teksGambar = row.c[3] && row.c[3].v ? String(row.c[3].v) : '';
@@ -170,22 +213,18 @@
                 const gambarUtama = arrayGambar.length > 0 ? arrayGambar[0] : 'https://via.placeholder.com/300x200?text=No+Image';
 
                 const linkDetail = `detail.html?id=${encodeURIComponent(namaMotor)}`;
+                itemsCount++;
 
                 html += `
                     <div class="bg-white rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group flex flex-col h-full cursor-pointer" onclick="window.location.href='${linkDetail}'">
-                        
                         <div class="w-full h-36 sm:h-56 bg-gray-50 flex items-center justify-center p-3 sm:p-6 relative overflow-hidden">
                             <div class="absolute inset-0 bg-white opacity-40 rounded-full blur-2xl scale-75 group-hover:scale-100 transition-transform duration-500"></div>
                             <img src="${gambarUtama}" alt="${namaMotor}" class="card-img-hover max-w-full max-h-full object-contain drop-shadow-xl relative z-10">
                         </div>
-                        
                         <div class="p-3 sm:p-6 flex flex-col flex-grow text-center bg-white z-20">
                             <span class="inline-block bg-gray-100 text-gray-500 font-bold text-[8px] sm:text-[10px] uppercase tracking-widest py-1 px-2 sm:py-1.5 sm:px-3 rounded-full mb-2 sm:mb-4 mx-auto">${tipeMotor}</span>
-                            
                             <h4 class="text-sm sm:text-xl font-extrabold text-honda-dark mb-1 tracking-tight line-clamp-2">${namaMotor}</h4>
-                            
                             <p class="text-honda-red font-bold text-xs sm:text-lg mb-3 sm:mb-6 flex-grow">${hargaMotor}</p>
-                            
                             <a href="${linkDetail}" class="mt-auto inline-flex items-center justify-center w-full bg-white border border-honda-red sm:border-2 text-honda-red hover:bg-honda-red hover:text-white font-bold py-1.5 sm:py-2.5 px-2 sm:px-4 rounded-full transition-colors duration-300 text-xs sm:text-sm">
                                 Detail
                                 <svg class="w-3 h-3 sm:w-4 sm:h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
@@ -195,13 +234,16 @@
                 `;
             });
             
-            if (html === '') {
-                loading.innerHTML = '<p class="text-gray-500 font-semibold text-center w-full mt-10">Katalog masih kosong. Silakan tambah data via Admin.</p>';
+            // Hilangkan loading
+            loading.style.display = 'none';
+            
+            if (itemsCount === 0) {
+                productGrid.innerHTML = `<div class="col-span-full text-center py-10"><p class="text-gray-500 font-semibold">Motor tipe ${filterKategori === 'SEMUA' ? 'ini' : filterKategori} belum tersedia di katalog.</p></div>`;
             } else {
-                loading.style.display = 'none';
                 productGrid.innerHTML = html;
-                productGrid.classList.remove('hidden');
             }
+            
+            productGrid.classList.remove('hidden');
         }
         
         fetchMotorData();
