@@ -72,15 +72,15 @@
 
     <main id="katalog" class="container mx-auto px-4 py-10 lg:py-20 flex-grow max-w-7xl">
         
-        <div class="text-center mb-6 md:mb-10">
-            <h3 class="text-2xl md:text-4xl font-extrabold text-honda-dark mb-6 md:mb-8 tracking-tight">Pilih Motor Honda Favorit Anda</h3>
+        <div class="text-center mb-8 md:mb-10">
+            <h3 class="text-2xl md:text-4xl font-extrabold text-honda-dark mb-4 md:mb-8 tracking-tight">Pilih Motor Honda Favorit Anda</h3>
             
-            <div class="flex overflow-x-auto hide-scroll justify-start sm:justify-center gap-5 md:gap-10 px-2 mt-2">
-                <button id="tab-default" onclick="filterCategory('MATIC', this)" class="category-tab whitespace-nowrap pb-2 md:pb-3 text-base md:text-lg font-bold text-honda-dark border-b-2 border-honda-dark transition-all">Matic</button>
-                <button onclick="filterCategory('SPORT', this)" class="category-tab whitespace-nowrap pb-2 md:pb-3 text-base md:text-lg font-semibold text-gray-400 hover:text-honda-dark border-b-2 border-transparent hover:border-gray-300 transition-all">Sport</button>
-                <button onclick="filterCategory('CUB', this)" class="category-tab whitespace-nowrap pb-2 md:pb-3 text-base md:text-lg font-semibold text-gray-400 hover:text-honda-dark border-b-2 border-transparent hover:border-gray-300 transition-all">Cub</button>
-                <button onclick="filterCategory('EV', this)" class="category-tab whitespace-nowrap pb-2 md:pb-3 text-base md:text-lg font-semibold text-gray-400 hover:text-honda-dark border-b-2 border-transparent hover:border-gray-300 transition-all">EV</button>
-                </div>
+            <div class="flex overflow-x-auto hide-scroll justify-center gap-4 sm:gap-6 md:gap-10 px-2 mt-2 w-full">
+                <button id="tab-default" onclick="filterCategory('MATIC', this)" class="category-tab whitespace-nowrap pb-2 md:pb-3 text-sm md:text-lg font-bold text-honda-dark border-b-2 border-honda-dark transition-all">Matic</button>
+                <button onclick="filterCategory('SPORT', this)" class="category-tab whitespace-nowrap pb-2 md:pb-3 text-sm md:text-lg font-semibold text-gray-400 hover:text-honda-dark border-b-2 border-transparent hover:border-gray-300 transition-all">Sport</button>
+                <button onclick="filterCategory('CUB', this)" class="category-tab whitespace-nowrap pb-2 md:pb-3 text-sm md:text-lg font-semibold text-gray-400 hover:text-honda-dark border-b-2 border-transparent hover:border-gray-300 transition-all">Cub</button>
+                <button onclick="filterCategory('EV', this)" class="category-tab whitespace-nowrap pb-2 md:pb-3 text-sm md:text-lg font-semibold text-gray-400 hover:text-honda-dark border-b-2 border-transparent hover:border-gray-300 transition-all">EV</button>
+            </div>
         </div>
 
         <div id="loading" class="flex flex-col justify-center items-center py-20">
