@@ -39,7 +39,7 @@
             <a href="index.html">
                 <img src="https://ik.imagekit.io/zlt25mb52fx/ahmcdn/assets/images/logo/honda.svg" alt="Logo Astra Honda" class="h-8 md:h-10">
             </a>
-            <a href="#katalog" class="bg-honda-red text-white px-6 py-2.5 rounded-full font-bold text-sm hover:bg-red-800 transition-colors shadow-md hover:shadow-lg">
+            <a href="#katalog" class="bg-honda-red text-white px-5 py-2 md:px-6 md:py-2.5 rounded-full font-bold text-xs md:text-sm hover:bg-red-800 transition-colors shadow-md hover:shadow-lg">
                 Lihat Produk
             </a>
         </div>
@@ -59,43 +59,42 @@
                 </div>
             </div>
 
-            <button id="prevSlide" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 backdrop-blur-sm text-honda-red p-3 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 focus:outline-none hover:bg-white hover:scale-110">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path></svg>
+            <button id="prevSlide" class="absolute left-2 md:left-4 top-1/2 transform -translate-y-1/2 bg-white/80 backdrop-blur-sm text-honda-red p-2 md:p-3 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 focus:outline-none hover:bg-white hover:scale-110">
+                <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path></svg>
             </button>
-            <button id="nextSlide" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 backdrop-blur-sm text-honda-red p-3 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 focus:outline-none hover:bg-white hover:scale-110">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
+            <button id="nextSlide" class="absolute right-2 md:right-4 top-1/2 transform -translate-y-1/2 bg-white/80 backdrop-blur-sm text-honda-red p-2 md:p-3 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 focus:outline-none hover:bg-white hover:scale-110">
+                <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
             </button>
             
-            <div id="slider-dots" class="absolute bottom-6 left-0 right-0 flex justify-center space-x-3"></div>
+            <div id="slider-dots" class="absolute bottom-4 md:bottom-6 left-0 right-0 flex justify-center space-x-2 md:space-x-3"></div>
         </div>
     </header>
 
-    <main id="katalog" class="container mx-auto px-4 py-12 lg:py-20 flex-grow max-w-7xl">
+    <main id="katalog" class="container mx-auto px-4 py-10 lg:py-20 flex-grow max-w-7xl">
         
-        <div class="text-center mb-8">
-            <h3 class="text-3xl md:text-4xl font-extrabold text-honda-dark mb-8 tracking-tight">Pilih Motor Honda Favorit Anda</h3>
+        <div class="text-center mb-6 md:mb-10">
+            <h3 class="text-2xl md:text-4xl font-extrabold text-honda-dark mb-6 md:mb-8 tracking-tight">Pilih Motor Honda Favorit Anda</h3>
             
-            <div class="flex overflow-x-auto hide-scroll justify-start sm:justify-center gap-6 md:gap-10 px-2">
-                <button onclick="filterCategory('SEMUA', this)" class="category-tab whitespace-nowrap pb-3 text-lg font-bold text-honda-dark border-b-2 border-honda-dark transition-all">Semua</button>
-                <button onclick="filterCategory('MATIC', this)" class="category-tab whitespace-nowrap pb-3 text-lg font-semibold text-gray-400 hover:text-honda-dark border-b-2 border-transparent hover:border-gray-300 transition-all">Matic</button>
-                <button onclick="filterCategory('SPORT', this)" class="category-tab whitespace-nowrap pb-3 text-lg font-semibold text-gray-400 hover:text-honda-dark border-b-2 border-transparent hover:border-gray-300 transition-all">Sport</button>
-                <button onclick="filterCategory('CUB', this)" class="category-tab whitespace-nowrap pb-3 text-lg font-semibold text-gray-400 hover:text-honda-dark border-b-2 border-transparent hover:border-gray-300 transition-all">Cub</button>
-                <button onclick="filterCategory('EV', this)" class="category-tab whitespace-nowrap pb-3 text-lg font-semibold text-gray-400 hover:text-honda-dark border-b-2 border-transparent hover:border-gray-300 transition-all">EV</button>
-                <button onclick="filterCategory('BIGBIKE', this)" class="category-tab whitespace-nowrap pb-3 text-lg font-semibold text-gray-400 hover:text-honda-dark border-b-2 border-transparent hover:border-gray-300 transition-all">BigBike</button>
+            <div class="flex overflow-x-auto hide-scroll justify-start sm:justify-center gap-5 md:gap-10 px-2 mt-2">
+                <button id="tab-default" onclick="filterCategory('MATIC', this)" class="category-tab whitespace-nowrap pb-2 md:pb-3 text-base md:text-lg font-bold text-honda-dark border-b-2 border-honda-dark transition-all">Matic</button>
+                <button onclick="filterCategory('SPORT', this)" class="category-tab whitespace-nowrap pb-2 md:pb-3 text-base md:text-lg font-semibold text-gray-400 hover:text-honda-dark border-b-2 border-transparent hover:border-gray-300 transition-all">Sport</button>
+                <button onclick="filterCategory('CUB', this)" class="category-tab whitespace-nowrap pb-2 md:pb-3 text-base md:text-lg font-semibold text-gray-400 hover:text-honda-dark border-b-2 border-transparent hover:border-gray-300 transition-all">Cub</button>
+                <button onclick="filterCategory('EV', this)" class="category-tab whitespace-nowrap pb-2 md:pb-3 text-base md:text-lg font-semibold text-gray-400 hover:text-honda-dark border-b-2 border-transparent hover:border-gray-300 transition-all">EV</button>
+                <button onclick="filterCategory('BIGBIKE', this)" class="category-tab whitespace-nowrap pb-2 md:pb-3 text-base md:text-lg font-semibold text-gray-400 hover:text-honda-dark border-b-2 border-transparent hover:border-gray-300 transition-all">BigBike</button>
             </div>
         </div>
 
         <div id="loading" class="flex flex-col justify-center items-center py-20">
-            <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-16 w-16 mb-4"></div>
-            <p class="text-gray-500 font-semibold animate-pulse">Memuat katalog...</p>
+            <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 md:h-16 md:w-16 mb-4"></div>
+            <p class="text-sm md:text-base text-gray-500 font-semibold animate-pulse">Memuat katalog...</p>
         </div>
 
-        <div id="product-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6 lg:gap-8 hidden">
+        <div id="product-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6 lg:gap-8 hidden">
             </div>
     </main>
 
-    <footer class="bg-honda-dark text-white text-center py-8 mt-auto">
-        <p class="text-sm text-gray-400">&copy; 2026 Sales Motor Honda. Hak cipta dilindungi.</p>
+    <footer class="bg-honda-dark text-white text-center py-6 md:py-8 mt-auto">
+        <p class="text-xs md:text-sm text-gray-400">&copy; 2026 Sales Motor Honda. Hak cipta dilindungi.</p>
     </footer>
 
     <script>
@@ -108,7 +107,7 @@
 
         for(let i = 0; i < totalSlides; i++) {
             const dot = document.createElement('button');
-            dot.className = `w-3 h-3 rounded-full ${i === 0 ? 'bg-honda-red w-8' : 'bg-white/70'} focus:outline-none transition-all duration-300 shadow-md`;
+            dot.className = `w-2 h-2 md:w-3 md:h-3 rounded-full ${i === 0 ? 'bg-honda-red w-6 md:w-8' : 'bg-white/70'} focus:outline-none transition-all duration-300 shadow-md`;
             dot.addEventListener('click', () => goToSlide(i));
             dotsContainer.appendChild(dot);
         }
@@ -117,7 +116,7 @@
         function updateSlider() {
             slideContainer.style.transform = `translateX(-${currentIndex * 100}%)`;
             Array.from(dots).forEach((dot, index) => {
-                dot.className = `h-3 rounded-full ${index === currentIndex ? 'bg-honda-red w-8' : 'bg-white/70 w-3'} focus:outline-none transition-all duration-300 shadow-md`;
+                dot.className = `h-2 md:h-3 rounded-full ${index === currentIndex ? 'bg-honda-red w-6 md:w-8' : 'bg-white/70 w-2 md:w-3'} focus:outline-none transition-all duration-300 shadow-md`;
             });
         }
         function nextSlide() { currentIndex = (currentIndex + 1) % totalSlides; updateSlider(); resetInterval(); }
@@ -137,7 +136,6 @@
         const productGrid = document.getElementById('product-grid');
         const loading = document.getElementById('loading');
 
-        // Variabel untuk menyimpan semua data dari Sheet agar tidak perlu loading terus saat filter diganti
         let allProductsData = [];
 
         async function fetchMotorData() {
@@ -151,31 +149,31 @@
                 const jsonString = text.substring(startIndex, endIndex);
                 const data = JSON.parse(jsonString);
 
-                // Simpan data ke variabel global
                 allProductsData = data.table.rows;
                 
-                // Tampilkan SEMUA kategori saat web pertama kali dibuka
-                renderProducts('SEMUA');
+                // Langsung simulasikan klik pada tab Matic saat pertama kali web dibuka
+                const tabDefault = document.getElementById('tab-default');
+                filterCategory('MATIC', tabDefault);
                 
             } catch (error) {
-                loading.innerHTML = `<div class="text-center bg-red-50 p-6 rounded-2xl mx-4 max-w-lg w-full"><p class="text-honda-red font-extrabold text-xl mb-2">⚠ Gagal Memuat Data</p></div>`;
+                loading.innerHTML = `<div class="text-center bg-red-50 p-4 md:p-6 rounded-2xl mx-4 max-w-lg w-full"><p class="text-honda-red font-extrabold text-lg md:text-xl mb-2">⚠ Gagal Memuat Data</p></div>`;
             }
         }
 
         // FUNGSI UNTUK TAB KATEGORI
         function filterCategory(categoryTarget, btnElement) {
-            // 1. Ubah styling tab (Reset semua, lalu aktifkan yang diklik)
+            // Ubah styling tab
             const allTabs = document.querySelectorAll('.category-tab');
             allTabs.forEach(tab => {
                 tab.classList.remove('font-bold', 'text-honda-dark', 'border-honda-dark');
                 tab.classList.add('font-semibold', 'text-gray-400', 'border-transparent');
             });
             
-            // Set tab yang diklik jadi tebal dan digarisbawahi
+            // Set tab yang diklik jadi aktif
             btnElement.classList.remove('font-semibold', 'text-gray-400', 'border-transparent');
             btnElement.classList.add('font-bold', 'text-honda-dark', 'border-honda-dark');
 
-            // 2. Render ulang produk berdasarkan kategori
+            // Render produk
             renderProducts(categoryTarget);
         }
 
@@ -184,7 +182,6 @@
             let itemsCount = 0;
 
             allProductsData.forEach(row => {
-                // Filter sapu jagat
                 if (!row || !row.c || row.c.length === 0) return;
                 
                 let cellNama = row.c[0];
@@ -202,12 +199,11 @@
                 const tipeMotor = row.c[1] && row.c[1].v ? String(row.c[1].v).trim() : 'HONDA';
                 
                 // LOGIKA FILTER: Cek apakah tipe motor sama dengan tab yang diklik
-                if (filterKategori !== 'SEMUA' && tipeMotor.toUpperCase() !== filterKategori.toUpperCase()) {
-                    return; // Lewati motor ini jika tidak sesuai kategori
+                if (tipeMotor.toUpperCase() !== filterKategori.toUpperCase()) {
+                    return; 
                 }
 
                 const hargaMotor = row.c[2] && row.c[2].v ? row.c[2].v : 'Hubungi Kami';
-                
                 const teksGambar = row.c[3] && row.c[3].v ? String(row.c[3].v) : '';
                 const arrayGambar = teksGambar.split(';').map(url => url.trim()).filter(url => url !== '');
                 const gambarUtama = arrayGambar.length > 0 ? arrayGambar[0] : 'https://via.placeholder.com/300x200?text=No+Image';
@@ -216,29 +212,33 @@
                 itemsCount++;
 
                 html += `
-                    <div class="bg-white rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group flex flex-col h-full cursor-pointer" onclick="window.location.href='${linkDetail}'">
-                        <div class="w-full h-36 sm:h-56 bg-gray-50 flex items-center justify-center p-3 sm:p-6 relative overflow-hidden">
+                    <div class="bg-white rounded-2xl md:rounded-3xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group flex flex-col h-full cursor-pointer" onclick="window.location.href='${linkDetail}'">
+                        
+                        <div class="w-full h-32 md:h-56 bg-gray-50 flex items-center justify-center p-3 md:p-6 relative overflow-hidden">
                             <div class="absolute inset-0 bg-white opacity-40 rounded-full blur-2xl scale-75 group-hover:scale-100 transition-transform duration-500"></div>
                             <img src="${gambarUtama}" alt="${namaMotor}" class="card-img-hover max-w-full max-h-full object-contain drop-shadow-xl relative z-10">
                         </div>
-                        <div class="p-3 sm:p-6 flex flex-col flex-grow text-center bg-white z-20">
-                            <span class="inline-block bg-gray-100 text-gray-500 font-bold text-[8px] sm:text-[10px] uppercase tracking-widest py-1 px-2 sm:py-1.5 sm:px-3 rounded-full mb-2 sm:mb-4 mx-auto">${tipeMotor}</span>
-                            <h4 class="text-sm sm:text-xl font-extrabold text-honda-dark mb-1 tracking-tight line-clamp-2">${namaMotor}</h4>
-                            <p class="text-honda-red font-bold text-xs sm:text-lg mb-3 sm:mb-6 flex-grow">${hargaMotor}</p>
-                            <a href="${linkDetail}" class="mt-auto inline-flex items-center justify-center w-full bg-white border border-honda-red sm:border-2 text-honda-red hover:bg-honda-red hover:text-white font-bold py-1.5 sm:py-2.5 px-2 sm:px-4 rounded-full transition-colors duration-300 text-xs sm:text-sm">
+                        
+                        <div class="p-3 md:p-6 flex flex-col flex-grow text-center bg-white z-20">
+                            <span class="inline-block bg-gray-100 text-gray-500 font-bold text-[9px] md:text-[10px] uppercase tracking-widest py-1 px-2 md:py-1.5 md:px-3 rounded-full mb-2 md:mb-4 mx-auto">${tipeMotor}</span>
+                            
+                            <h4 class="text-sm md:text-xl font-extrabold text-honda-dark mb-1 tracking-tight line-clamp-2 leading-snug">${namaMotor}</h4>
+                            
+                            <p class="text-honda-red font-bold text-sm md:text-lg mb-3 md:mb-6 flex-grow">${hargaMotor}</p>
+                            
+                            <a href="${linkDetail}" class="mt-auto inline-flex items-center justify-center w-full bg-white border border-honda-red md:border-2 text-honda-red hover:bg-honda-red hover:text-white font-bold py-2 md:py-2.5 px-3 md:px-4 rounded-full transition-colors duration-300 text-xs md:text-sm">
                                 Detail
-                                <svg class="w-3 h-3 sm:w-4 sm:h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
+                                <svg class="w-3 h-3 md:w-4 md:h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
                             </a>
                         </div>
                     </div>
                 `;
             });
             
-            // Hilangkan loading
             loading.style.display = 'none';
             
             if (itemsCount === 0) {
-                productGrid.innerHTML = `<div class="col-span-full text-center py-10"><p class="text-gray-500 font-semibold">Motor tipe ${filterKategori === 'SEMUA' ? 'ini' : filterKategori} belum tersedia di katalog.</p></div>`;
+                productGrid.innerHTML = `<div class="col-span-full text-center py-10"><p class="text-sm md:text-base text-gray-500 font-semibold">Motor tipe <span class="text-honda-red font-bold">${filterKategori}</span> belum tersedia di katalog.</p></div>`;
             } else {
                 productGrid.innerHTML = html;
             }
