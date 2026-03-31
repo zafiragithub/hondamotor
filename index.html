@@ -31,7 +31,8 @@
 
     <header class="pt-16 md:pt-20">
         <div class="relative w-full h-[250px] sm:h-[350px] md:h-[450px] lg:h-[600px] overflow-hidden group bg-white border-b">
-            <div class="w-full h-full flex-shrink-0 relative">
+            <div id="slide-container" class="flex transition-transform duration-500 ease-out h-full w-full">
+                <div class="w-full h-full flex-shrink-0 relative">
                     <img src="https://ik.imagekit.io/zlt25mb52fx/ahmcdn/tr:q-70,pr-true,f-auto/uploads/page/banner/homepage-banner-1366x573ai-11022026-070311.jpg" alt="Promo 1" class="w-full h-full object-cover">
                 </div>
                 <div class="w-full h-full flex-shrink-0 relative">
@@ -102,7 +103,8 @@
         resetInterval();
 
         // --- GOOGLE SHEET & GVIZ ---
-        const SHEET_ID = '1T7cKvl4pwVO5hZWxq0JRm7JI5KeVKl-7Lf6waipXkq8'; // Ganti dengan ID Anda
+        // PENTING: Jangan hapus tanda kutip tunggal (' ') di awal dan akhir ID
+        const SHEET_ID = '1T7cKvl4pwVO5hZWxq0JRm7JI5KeVKl-7Lf6waipXkq8'; 
         const SHEET_NAME = 'DataMotor'; 
         const gvizURL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`;
 
@@ -112,24 +114,53 @@
         async function fetchMotorData() {
             try {
                 const response = await fetch(gvizURL);
+                if (!response.ok) throw new Error(`HTTP Error! Status: ${response.status}`);
+                
                 const text = await response.text();
-                const jsonString = text.match(/google\.visualization\.Query\.setResponse\(([\s\S\w]+)\)/)[1];
+                
+                // Pengecekan jika link sheet dibatasi (bukan public)
+                if (text.includes('<html')) {
+                    throw new Error("Akses ditolak. Pastikan Google Sheet diset ke 'Anyone with the link'.");
+                }
+
+                // Cara ekstraksi JSON yang lebih aman, menghindari error regex
+                const startIndex = text.indexOf('{');
+                const endIndex = text.lastIndexOf('}') + 1;
+                
+                if (startIndex === -1 || endIndex === 0) {
+                    throw new Error("Format respons dari Google Sheet tidak valid.");
+                }
+
+                const jsonString = text.substring(startIndex, endIndex);
                 const data = JSON.parse(jsonString);
+
+                if (!data.table || !data.table.rows) {
+                    throw new Error("Tabel tidak ditemukan. Pastikan nama tab persis 'DataMotor'.");
+                }
+
                 renderProducts(data.table.rows);
             } catch (error) {
-                loading.innerHTML = '<p class="text-red-500 text-center font-semibold">Gagal memuat data katalog.</p>';
+                console.error("Detail Error:", error);
+                loading.innerHTML = `
+                    <div class="text-center bg-red-100 p-6 rounded-lg border border-red-300 mx-4 max-w-lg w-full">
+                        <p class="text-red-700 font-bold text-lg mb-2">⚠ Gagal Memuat Data</p>
+                        <p class="text-red-600 text-sm font-mono bg-white p-2 border border-red-200 rounded">${error.message}</p>
+                    </div>
+                `;
             }
         }
 
         function renderProducts(rows) {
             let html = '';
             rows.forEach(row => {
+                // Lewati baris jika benar-benar kosong
+                if (!row || !row.c || !row.c[0]) return;
+
                 const namaMotor = row.c[0] ? row.c[0].v : 'Tanpa Nama';
                 const tipeMotor = row.c[1] ? row.c[1].v : '-';
                 const hargaMotor = row.c[2] ? row.c[2].v : 'Hubungi Kami';
                 const gambarMotor = row.c[3] ? row.c[3].v : 'https://via.placeholder.com/300x200?text=No+Image';
 
-                // URL menuju halaman detail dengan mengirimkan parameter nama motor
                 const linkDetail = `detail.html?id=${encodeURIComponent(namaMotor)}`;
 
                 html += `
@@ -147,9 +178,14 @@
                     </div>
                 `;
             });
-            loading.style.display = 'none';
-            productGrid.innerHTML = html;
-            productGrid.classList.remove('hidden');
+            
+            if (html === '') {
+                loading.innerHTML = '<p class="text-gray-500 font-semibold">Tabel Google Sheet kosong. Silakan isi datanya terlebih dahulu.</p>';
+            } else {
+                loading.style.display = 'none';
+                productGrid.innerHTML = html;
+                productGrid.classList.remove('hidden');
+            }
         }
         fetchMotorData();
     </script>
