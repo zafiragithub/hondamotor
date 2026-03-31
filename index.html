@@ -153,19 +153,23 @@
         function renderProducts(rows) {
             let html = '';
             rows.forEach(row => {
-                // Lewati baris jika benar-benar kosong
                 if (!row || !row.c || !row.c[0]) return;
 
                 const namaMotor = row.c[0] ? row.c[0].v : 'Tanpa Nama';
                 const tipeMotor = row.c[1] ? row.c[1].v : '-';
                 const hargaMotor = row.c[2] ? row.c[2].v : 'Hubungi Kami';
-                const gambarMotor = row.c[3] ? row.c[3].v : 'https://via.placeholder.com/300x200?text=No+Image';
+                
+                // --- LOGIKA PEMISAH GAMBAR ---
+                const teksGambar = row.c[3] ? row.c[3].v : '';
+                // Pisahkan dengan koma, ambil urutan pertama [0]
+                const arrayGambar = teksGambar.split(',').map(url => url.trim());
+                const gambarUtama = arrayGambar[0] || 'https://via.placeholder.com/300x200?text=No+Image';
 
                 const linkDetail = `detail.html?id=${encodeURIComponent(namaMotor)}`;
 
                 html += `
                     <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300 border border-gray-100 flex flex-col h-full">
-                        <img src="${gambarMotor}" alt="${namaMotor}" class="w-full h-48 object-cover object-center bg-gray-100">
+                        <img src="${gambarUtama}" alt="${namaMotor}" class="w-full h-48 object-cover object-center bg-gray-100">
                         <div class="p-5 flex flex-col flex-grow">
                             <span class="text-xs font-semibold text-red-600 uppercase tracking-wide">${tipeMotor}</span>
                             <h4 class="text-lg font-bold text-gray-900 mt-1">${namaMotor}</h4>
