@@ -121,7 +121,9 @@
         // --- GOOGLE SHEET & GVIZ ---
         const SHEET_ID = '1T7cKvl4pwVO5hZWxq0JRm7JI5KeVKl-7Lf6waipXkq8'; 
         const SHEET_NAME = 'DataMotor'; 
-        const gvizURL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`;
+        
+        // JURUS 1: Tambahkan &headers=1 agar baris pertama dianggap judul
+        const gvizURL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&headers=1&sheet=${SHEET_NAME}`;
 
         const productGrid = document.getElementById('product-grid');
         const loading = document.getElementById('loading');
@@ -146,16 +148,21 @@
         function renderProducts(rows) {
             let html = '';
             rows.forEach(row => {
-                // FILTER SAPU JAGAT: Cegah baris hantu, null, dan spasi kosong
                 if (!row || !row.c || row.c.length === 0) return;
                 
                 let cellNama = row.c[0];
-                if (!cellNama || cellNama.v === null || cellNama.v === undefined || String(cellNama.v).trim() === '') return;
+                if (!cellNama || cellNama.v === null || cellNama.v === undefined) return;
                 
                 const namaMotor = String(cellNama.v).trim();
-                if (namaMotor.toLowerCase() === 'null') return; // Blokir tulisan null dari Google
                 
-                // Ambil sisa data jika lolos filter
+                // JURUS 2: Blokir kalau kosong, null, atau isinya judul kolom
+                if (namaMotor === '' || 
+                    namaMotor.toLowerCase() === 'null' || 
+                    namaMotor.toLowerCase() === 'nama motor' || 
+                    namaMotor.toLowerCase() === 'nama') {
+                    return; 
+                }
+                
                 const tipeMotor = row.c[1] && row.c[1].v ? row.c[1].v : 'HONDA';
                 const hargaMotor = row.c[2] && row.c[2].v ? row.c[2].v : 'Hubungi Kami';
                 
@@ -184,7 +191,7 @@
             });
             
             if (html === '') {
-                loading.innerHTML = '<p class="text-gray-500 font-semibold">Tabel Google Sheet kosong.</p>';
+                loading.innerHTML = '<p class="text-gray-500 font-semibold text-center w-full mt-10">Katalog masih kosong. Silakan tambah data via Admin.</p>';
             } else {
                 loading.style.display = 'none';
                 productGrid.innerHTML = html;
