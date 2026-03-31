@@ -3,131 +3,296 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Halaman Admin | Honda Sales</title>
+    <title>Halaman Admin Pro | Honda Sales</title>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Manrope', 'sans-serif'] },
-                    colors: { honda: { red: '#cc0000', dark: '#1f1f1f' } }
-                }
-            }
-        }
+        tailwind.config = { theme: { extend: { fontFamily: { sans: ['Manrope', 'sans-serif'] }, colors: { honda: { red: '#cc0000', dark: '#1f1f1f' } } } } }
     </script>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col">
 
     <nav class="bg-honda-dark p-4 shadow-md sticky top-0 z-50">
-        <div class="container mx-auto max-w-4xl flex justify-between items-center">
+        <div class="container mx-auto max-w-6xl flex justify-between items-center">
             <div class="text-white font-extrabold text-xl tracking-wider">
                 HONDA<span class="text-honda-red">ADMIN</span>
             </div>
-            <a href="index.html" target="_blank" class="text-gray-300 hover:text-white text-sm font-semibold transition">
-                Lihat Website
-            </a>
+            <a href="index.html" target="_blank" class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">Lihat Website</a>
         </div>
     </nav>
 
-    <main class="container mx-auto max-w-3xl px-4 py-10 flex-grow">
-        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
-            <div class="mb-8 border-b border-gray-200 pb-4">
-                <h1 class="text-2xl font-extrabold text-honda-dark">Tambah Motor Baru</h1>
-                <p class="text-gray-500 text-sm mt-1">Data yang dikirim akan otomatis masuk ke baris paling bawah di Google Sheet.</p>
+    <main class="container mx-auto max-w-6xl px-4 py-10 flex-grow grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <div class="lg:col-span-1 bg-white rounded-2xl shadow-lg border border-gray-100 p-6 h-fit sticky top-24">
+            <div class="mb-6 border-b border-gray-200 pb-4 flex justify-between items-center">
+                <h2 id="form-title" class="text-xl font-extrabold text-honda-dark">Tambah Motor Baru</h2>
+                <button type="button" id="btn-cancel-edit" class="hidden text-xs bg-gray-200 text-gray-700 px-3 py-1 rounded hover:bg-gray-300">Batal Edit</button>
             </div>
 
-            <div id="alert-box" class="hidden mb-6 p-4 rounded-lg font-bold text-sm text-center"></div>
+            <div id="alert-box" class="hidden mb-6 p-3 rounded-lg font-bold text-sm text-center"></div>
 
-            <form id="form-admin" name="submit-to-google-sheet" class="space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Nama Motor <span class="text-red-500">*</span></label>
-                        <input type="text" name="nama" required placeholder="Contoh: Honda Vario 160 ABS" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-honda-red focus:ring-2 focus:ring-red-200 outline-none transition bg-gray-50 focus:bg-white">
-                    </div>
+            <form id="form-admin" class="space-y-4">
+                <input type="hidden" id="input-action" name="action" value="create">
+                <input type="hidden" id="input-original-name" name="originalName" value="">
 
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Nama Motor</label>
+                    <input type="text" id="input-nama" name="nama" required class="w-full px-3 py-2 text-sm rounded border focus:border-honda-red outline-none bg-gray-50">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Kategori / Tipe <span class="text-red-500">*</span></label>
-                        <select name="tipe" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-honda-red focus:ring-2 focus:ring-red-200 outline-none transition bg-gray-50 focus:bg-white cursor-pointer">
-                            <option value="" disabled selected>Pilih Tipe</option>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">Tipe</label>
+                        <select id="input-tipe" name="tipe" required class="w-full px-3 py-2 text-sm rounded border focus:border-honda-red outline-none bg-gray-50">
                             <option value="MATIC">Matic</option>
                             <option value="SPORT">Sport</option>
                             <option value="CUB">Cub (Bebek)</option>
                             <option value="EV">EV (Listrik)</option>
                         </select>
                     </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">Harga OTR</label>
+                        <input type="text" id="input-harga" name="harga" required class="w-full px-3 py-2 text-sm rounded border focus:border-honda-red outline-none bg-gray-50">
+                    </div>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">Harga OTR <span class="text-red-500">*</span></label>
-                    <input type="text" name="harga" required placeholder="Contoh: Rp 29.513.000" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-honda-red focus:ring-2 focus:ring-red-200 outline-none transition bg-gray-50 focus:bg-white">
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Link Gambar (;)</label>
+                    <input type="text" id="input-gambar" name="gambar" required class="w-full px-3 py-2 text-sm rounded border focus:border-honda-red outline-none bg-gray-50">
                 </div>
 
                 <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">Link Gambar <span class="text-red-500">*</span></label>
-                    <input type="text" name="gambar" required placeholder="Contoh: link1.jpg ; link2.jpg" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-honda-red focus:ring-2 focus:ring-red-200 outline-none transition bg-gray-50 focus:bg-white">
-                    <p class="text-xs text-gray-400 mt-1">*Jika lebih dari 1 gambar, pisahkan dengan titik koma ( ; )</p>
+                    <label class="block text-xs font-bold text-gray-700 mb-1">Teks Promo</label>
+                    <textarea id="input-promo" rows="3" placeholder="Teks promo biasa..." class="w-full px-3 py-2 text-sm rounded border focus:border-honda-red outline-none bg-gray-50"></textarea>
                 </div>
 
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">Deskripsi & Spesifikasi <span class="text-red-500">*</span></label>
-                    <textarea name="deskripsi" required rows="6" placeholder="Masukkan teks promo atau tempelkan kode HTML tabel spesifikasi di sini..." class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-honda-red focus:ring-2 focus:ring-red-200 outline-none transition bg-gray-50 focus:bg-white font-mono text-sm"></textarea>
+                <div id="spec-container">
+                    <label class="block text-xs font-bold text-gray-700 mb-1 flex justify-between">
+                        <span>Spesifikasi Otomatis</span>
+                        <span class="text-red-500 font-normal">Gunakan tanda ( : )</span>
+                    </label>
+                    <textarea id="input-spek" rows="4" placeholder="Tipe Mesin : 4 Langkah&#10;Kapasitas : 150cc" class="w-full px-3 py-2 text-sm rounded border focus:border-honda-red outline-none bg-gray-50 font-mono"></textarea>
                 </div>
+                
+                <input type="hidden" id="input-deskripsi" name="deskripsi">
 
-                <div class="pt-4 border-t border-gray-100">
-                    <button type="submit" id="btn-submit" class="w-full bg-honda-red hover:bg-red-800 text-white font-extrabold py-4 px-6 rounded-xl transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex justify-center items-center">
-                        <span id="btn-text">Simpan ke Google Sheet</span>
-                        <svg id="btn-spinner" class="hidden animate-spin ml-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                    </button>
-                </div>
+                <button type="submit" id="btn-submit" class="w-full bg-honda-red hover:bg-red-800 text-white font-bold py-3 px-4 rounded-xl transition-all flex justify-center">
+                    <span id="btn-text">Simpan Data</span>
+                </button>
             </form>
         </div>
+
+        <div class="lg:col-span-2 bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+            <h2 class="text-xl font-extrabold text-honda-dark mb-4 border-b border-gray-200 pb-4">Daftar Motor (Database)</h2>
+            <div id="table-loading" class="text-center py-10 text-gray-500">Memuat data dari Google Sheet...</div>
+            
+            <div class="overflow-x-auto hidden" id="table-container">
+                <table class="min-w-full text-sm text-left">
+                    <thead class="bg-gray-100 text-gray-600 uppercase text-xs font-bold">
+                        <tr>
+                            <th class="px-4 py-3 rounded-tl-lg">Gambar</th>
+                            <th class="px-4 py-3">Nama Motor</th>
+                            <th class="px-4 py-3">Tipe</th>
+                            <th class="px-4 py-3">Harga</th>
+                            <th class="px-4 py-3 rounded-tr-lg text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body" class="divide-y divide-gray-100">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+
     </main>
 
     <script>
-        // GANTI TULISAN DI BAWAH INI DENGAN LINK DARI GOOGLE APPS SCRIPT BOS
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbz6Iw7RxUDumhgVv1FTWo3l2LGRndGDqCBJq_ZB1KqhJO4NCJNrW5VwkZdyWHTt1mJzHA/exec';
+        // ==========================================
+        // 1. PENGATURAN API (WAJIB DIISI BOS!)
+        // ==========================================
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz6Iw7RxUDumhgVv1FTWo3l2LGRndGDqCBJq_ZB1KqhJO4NCJNrW5VwkZdyWHTt1mJzHA/exec'; // Hasil Deploy Apps Script baru
+        const SHEET_ID = '1T7cKvl4pwVO5hZWxq0JRm7JI5KeVKl-7Lf6waipXkq8'; // ID Google Sheet
         
-        const form = document.forms['submit-to-google-sheet'];
-        const btnSubmit = document.getElementById('btn-submit');
-        const btnText = document.getElementById('btn-text');
-        const btnSpinner = document.getElementById('btn-spinner');
-        const alertBox = document.getElementById('alert-box');
+        const gvizURL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=DataMotor`;
+        let globalDataMotor = [];
 
+        // DOM Elements
+        const form = document.getElementById('form-admin');
+        const alertBox = document.getElementById('alert-box');
+        const tableBody = document.getElementById('table-body');
+        const tableContainer = document.getElementById('table-container');
+        const tableLoading = document.getElementById('table-loading');
+        const formTitle = document.getElementById('form-title');
+        const btnCancelEdit = document.getElementById('btn-cancel-edit');
+        const specContainer = document.getElementById('spec-container');
+
+        // ==========================================
+        // 2. AMBIL DATA UNTUK TABEL
+        // ==========================================
+        async function loadTable() {
+            tableLoading.style.display = 'block';
+            tableContainer.classList.add('hidden');
+            tableBody.innerHTML = '';
+            globalDataMotor = [];
+
+            try {
+                const response = await fetch(gvizURL);
+                const text = await response.text();
+                const jsonString = text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1);
+                const data = JSON.parse(jsonString);
+                
+                let rows = data.table.rows;
+                let html = '';
+
+                rows.forEach(row => {
+                    // Cek jika baris benar-benar kosong (Solusi baris hantu)
+                    if (!row || !row.c || !row.c[0] || row.c[0].v === null || String(row.c[0].v).trim() === '') return;
+
+                    const nama = row.c[0].v;
+                    const tipe = row.c[1] ? row.c[1].v : '-';
+                    const harga = row.c[2] ? row.c[2].v : '-';
+                    const gambarRaw = row.c[3] ? row.c[3].v : '';
+                    const deskripsiHtml = row.c[4] ? row.c[4].v : '';
+                    const gambarUtama = gambarRaw.split(';')[0] || 'https://via.placeholder.com/50';
+
+                    // Simpan ke array global untuk fitur Edit
+                    globalDataMotor.push({nama, tipe, harga, gambar: gambarRaw, deskripsi: deskripsiHtml});
+
+                    html += `
+                        <tr class="hover:bg-gray-50 transition">
+                            <td class="px-4 py-3"><img src="${gambarUtama}" class="w-12 h-12 object-cover rounded bg-white border"></td>
+                            <td class="px-4 py-3 font-bold text-honda-dark">${nama}</td>
+                            <td class="px-4 py-3"><span class="bg-gray-200 text-xs px-2 py-1 rounded">${tipe}</span></td>
+                            <td class="px-4 py-3 text-honda-red font-semibold">${harga}</td>
+                            <td class="px-4 py-3 text-center space-x-2">
+                                <button onclick="editMotor('${nama}')" class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-1 rounded text-xs font-bold transition">Edit</button>
+                                <button onclick="deleteMotor('${nama}')" class="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1 rounded text-xs font-bold transition">Hapus</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                tableBody.innerHTML = html;
+                tableLoading.style.display = 'none';
+                tableContainer.classList.remove('hidden');
+            } catch (error) {
+                tableLoading.innerHTML = `<span class="text-red-500 font-bold">Gagal memuat tabel database.</span>`;
+            }
+        }
+
+        // ==========================================
+        // 3. FUNGSI EDIT & HAPUS
+        // ==========================================
+        function editMotor(namaMotor) {
+            const motor = globalDataMotor.find(m => m.nama === namaMotor);
+            if(!motor) return;
+
+            document.getElementById('input-action').value = 'update';
+            document.getElementById('input-original-name').value = motor.nama;
+            document.getElementById('input-nama').value = motor.nama;
+            document.getElementById('input-tipe').value = motor.tipe;
+            document.getElementById('input-harga').value = motor.harga;
+            document.getElementById('input-gambar').value = motor.gambar;
+            
+            // Masukkan HTML utuh ke Promo, sembunyikan kotak spek (karena sudah berbentuk HTML)
+            document.getElementById('input-promo').value = motor.deskripsi;
+            specContainer.style.display = 'none'; 
+
+            formTitle.textContent = 'Edit Motor';
+            formTitle.classList.add('text-blue-600');
+            document.getElementById('btn-text').textContent = 'Update Data Motor';
+            document.getElementById('btn-submit').classList.replace('bg-honda-red', 'bg-blue-600');
+            document.getElementById('btn-submit').classList.replace('hover:bg-red-800', 'hover:bg-blue-800');
+            btnCancelEdit.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        btnCancelEdit.addEventListener('click', resetForm);
+
+        function resetForm() {
+            form.reset();
+            document.getElementById('input-action').value = 'create';
+            document.getElementById('input-original-name').value = '';
+            specContainer.style.display = 'block';
+            
+            formTitle.textContent = 'Tambah Motor Baru';
+            formTitle.classList.remove('text-blue-600');
+            document.getElementById('btn-text').textContent = 'Simpan Data';
+            document.getElementById('btn-submit').classList.replace('bg-blue-600', 'bg-honda-red');
+            document.getElementById('btn-submit').classList.replace('hover:bg-blue-800', 'hover:bg-red-800');
+            btnCancelEdit.classList.add('hidden');
+        }
+
+        function deleteMotor(namaMotor) {
+            if(confirm(`YAKIN INGIN MENGHAPUS ${namaMotor} DARI KATALOG?`)) {
+                let formData = new FormData();
+                formData.append('action', 'delete');
+                formData.append('nama', namaMotor);
+
+                fetch(SCRIPT_URL, { method: 'POST', body: formData })
+                    .then(res => res.text())
+                    .then(result => {
+                        alert(result);
+                        loadTable();
+                    });
+            }
+        }
+
+        // ==========================================
+        // 4. GENERATOR HTML & SUBMIT FORM
+        // ==========================================
         form.addEventListener('submit', e => {
             e.preventDefault();
             
-            // Ubah tombol jadi loading
+            const btnSubmit = document.getElementById('btn-submit');
             btnSubmit.disabled = true;
-            btnSubmit.classList.add('opacity-70', 'cursor-not-allowed');
-            btnText.textContent = 'Menyimpan...';
-            btnSpinner.classList.remove('hidden');
-            alertBox.classList.add('hidden');
+            btnSubmit.classList.add('opacity-50');
+            
+            let action = document.getElementById('input-action').value;
+            let promoText = document.getElementById('input-promo').value;
+            let finalHTML = promoText; // Default pakai promo text
 
-            fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+            // GENERATOR HTML (Hanya jalan saat Create, karena saat Edit speknya dihide)
+            if (action === 'create') {
+                let specText = document.getElementById('input-spek').value;
+                if (specText.trim() !== '') {
+                    finalHTML += '<br><br><ul class="text-sm space-y-2 w-full mt-4">';
+                    let lines = specText.split('\n');
+                    lines.forEach(line => {
+                        if (line.includes(':')) {
+                            let parts = line.split(':');
+                            let key = parts[0].trim();
+                            let val = parts.slice(1).join(':').trim();
+                            finalHTML += `<li class="flex justify-between border-b border-gray-200 pb-1"><span class="font-semibold text-gray-700 pr-4">${key}</span> <span class="text-right text-gray-600">${val}</span></li>`;
+                        } else if (line.trim() !== '') {
+                            finalHTML += `<li class="border-b border-gray-200 pb-1 text-gray-600">${line.trim()}</li>`;
+                        }
+                    });
+                    finalHTML += '</ul>';
+                }
+            }
+
+            document.getElementById('input-deskripsi').value = finalHTML;
+
+            fetch(SCRIPT_URL, { method: 'POST', body: new FormData(form)})
                 .then(response => {
-                    // Berhasil
-                    alertBox.textContent = '✅ Data motor berhasil ditambahkan ke Google Sheet!';
-                    alertBox.className = 'mb-6 p-4 rounded-lg font-bold text-sm text-center bg-green-100 text-green-700 border border-green-200 block';
-                    form.reset();
+                    alertBox.textContent = '✅ Berhasil!';
+                    alertBox.className = 'mb-6 p-3 rounded font-bold text-sm text-center bg-green-100 text-green-700 block';
+                    resetForm();
+                    loadTable(); // Reload tabel otomatis
                 })
                 .catch(error => {
-                    // Gagal
-                    console.error('Error!', error.message);
-                    alertBox.textContent = '❌ Gagal menyimpan data. Pastikan link Web App sudah benar.';
-                    alertBox.className = 'mb-6 p-4 rounded-lg font-bold text-sm text-center bg-red-100 text-red-700 border border-red-200 block';
+                    alertBox.textContent = '❌ Gagal menyimpan. Cek URL Web App.';
+                    alertBox.className = 'mb-6 p-3 rounded font-bold text-sm text-center bg-red-100 text-red-700 block';
                 })
                 .finally(() => {
-                    // Kembalikan tombol ke semula
                     btnSubmit.disabled = false;
-                    btnSubmit.classList.remove('opacity-70', 'cursor-not-allowed');
-                    btnText.textContent = 'Simpan ke Google Sheet';
-                    btnSpinner.classList.add('hidden');
-                    
-                    // Hilangkan notif setelah 5 detik
-                    setTimeout(() => { alertBox.classList.add('hidden'); }, 5000);
+                    btnSubmit.classList.remove('opacity-50');
+                    setTimeout(() => { alertBox.classList.add('hidden'); }, 4000);
                 });
         });
+
+        // Jalankan saat pertama kali dibuka
+        loadTable();
     </script>
 </body>
 </html>
