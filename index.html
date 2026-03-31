@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katalog Motor Honda | Sales Resmi</title>
+    <meta name="description" content="Katalog harga dan spesifikasi motor Honda terbaru. Hubungi kami untuk promo menarik!">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .loader {
+            border-top-color: #e53e3e;
+            -webkit-animation: spinner 1.5s linear infinite;
+            animation: spinner 1.5s linear infinite;
+        }
+        @keyframes spinner {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+
+    <nav class="bg-red-600 text-white p-4 shadow-md fixed w-full top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold tracking-wider">HONDA<span class="font-light">SALES</span></h1>
+            <a href="#katalog" class="bg-white text-red-600 px-4 py-2 rounded-full font-semibold text-sm hover:bg-gray-100 transition">Lihat Promo</a>
+        </div>
+    </nav>
+
+    <header class="pt-24 pb-12 bg-white text-center">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-5xl font-extrabold text-gray-900 mb-4">Dapatkan Motor Honda Impianmu!</h2>
+            <p class="text-lg text-gray-600 mb-8">Proses cepat, syarat mudah, dan banyak promo diskon DP & Cicilan.</p>
+        </div>
+    </header>
+
+    <main id="katalog" class="container mx-auto px-4 py-8 min-h-screen">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="text-2xl font-bold border-l-4 border-red-600 pl-3">Katalog Terbaru</h3>
+        </div>
+
+        <div id="loading" class="flex justify-center items-center py-20">
+            <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12"></div>
+        </div>
+
+        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 hidden">
+            </div>
+    </main>
+
+    <footer class="bg-gray-900 text-white text-center py-6 mt-12">
+        <p>&copy; 2026 Sales Motor Honda. Hak cipta dilindungi.</p>
+    </footer>
+
+    <script>
+        // ==========================================
+        // PENGATURAN DATABASE & KONTAK
+        // ==========================================
+        const SHEET_ID = '1T7cKvl4pwVO5hZWxq0JRm7JI5KeVKl-7Lf6waipXkq8'; // Ganti dengan ID Google Sheet Anda
+        const SHEET_NAME = 'DataMotor'; // Nama tab di Google Sheet
+        const NOMOR_WA = '628871271633'; // Ganti dengan nomor WhatsApp Anda (Gunakan 62 di depan)
+
+        // URL Endpoint Google Visualization API
+        const gvizURL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`;
+
+        // Elemen DOM
+        const productGrid = document.getElementById('product-grid');
+        const loading = document.getElementById('loading');
+
+        // Fungsi Mengambil Data
+        async function fetchMotorData() {
+            try {
+                const response = await fetch(gvizURL);
+                const text = await response.text();
+                
+                // Gviz mengembalikan data yang dibungkus function, kita harus memotongnya
+                const jsonString = text.match(/google\.visualization\.Query\.setResponse\(([\s\S\w]+)\)/)[1];
+                const data = JSON.parse(jsonString);
+                
+                // Melewati baris pertama (Header) dan memproses baris data
+                const rows = data.table.rows;
+                renderProducts(rows);
+            } catch (error) {
+                console.error('Gagal mengambil data:', error);
+                loading.innerHTML = '<p class="text-red-500">Gagal memuat data. Pastikan ID Sheet benar dan akses diset ke Public.</p>';
+            }
+        }
+
+        // Fungsi Menampilkan Data ke HTML
+        function renderProducts(rows) {
+            let html = '';
+
+            rows.forEach(row => {
+                // Pastikan cell tidak kosong sebelum diambil nilainya
+                const namaMotor = row.c[0] ? row.c[0].v : 'Tanpa Nama';
+                const tipeMotor = row.c[1] ? row.c[1].v : '-';
+                const hargaMotor = row.c[2] ? row.c[2].v : 'Hubungi Kami';
+                const gambarMotor = row.c[3] ? row.c[3].v : 'https://via.placeholder.com/300x200?text=No+Image';
+
+                // Format Pesan WhatsApp
+                const pesanWA = encodeURIComponent(`Halo bos, saya tertarik dengan motor ${namaMotor}. Bisa minta info promo terbarunya?`);
+                const linkWA = `https://wa.me/${NOMOR_WA}?text=${pesanWA}`;
+
+                html += `
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300">
+                        <img src="${gambarMotor}" alt="${namaMotor}" class="w-full h-48 object-cover object-center bg-gray-100">
+                        <div class="p-5">
+                            <span class="text-xs font-semibold text-red-600 uppercase tracking-wide">${tipeMotor}</span>
+                            <h4 class="text-lg font-bold text-gray-900 mt-1">${namaMotor}</h4>
+                            <p class="text-gray-600 mt-2 font-medium">${hargaMotor}</p>
+                            <a href="${linkWA}" target="_blank" class="mt-4 block text-center w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition">
+                                Pesan via WhatsApp
+                            </a>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Sembunyikan loading, tampilkan grid
+            loading.style.display = 'none';
+            productGrid.innerHTML = html;
+            productGrid.classList.remove('hidden');
+        }
+
+        // Jalankan saat halaman dimuat
+        fetchMotorData();
+    </script>
+</body>
+</html>
