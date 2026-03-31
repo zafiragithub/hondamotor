@@ -94,10 +94,9 @@
             const tipeMotor = motor.c[1] ? motor.c[1].v : '-';
             const hargaMotor = motor.c[2] ? motor.c[2].v : 'Hubungi Kami';
             
-            // --- LOGIKA MULTI GAMBAR ---
-            const teksGambar = motor.c[3] ? motor.c[3].v : '';
-            // Pisahkan teks berdasarkan koma, dan bersihkan spasi
-            const arrayGambar = teksGambar.split(',').map(url => url.trim()).filter(url => url !== '');
+            // --- LOGIKA MULTI GAMBAR DIGANTI JADI TITIK KOMA (;) ---
+            const teksGambar = motor.c[3] ? String(motor.c[3].v) : '';
+            const arrayGambar = teksGambar.split(';').map(url => url.trim()).filter(url => url !== '');
             const gambarUtama = arrayGambar.length > 0 ? arrayGambar[0] : 'https://via.placeholder.com/600x400?text=No+Image';
             
             // Buat HTML untuk Thumbnail jika gambar lebih dari 1
